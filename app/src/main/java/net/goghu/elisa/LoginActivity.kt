@@ -9,8 +9,11 @@ import android.view.View
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
+import com.google.gson.Gson
 import net.goghu.elisa.databinding.ActivityLoginBinding
+import org.json.JSONArray
 import org.json.JSONObject
+import org.json.JSONTokener
 
 class LoginActivity : AppCompatActivity() {
 
@@ -75,6 +78,10 @@ class LoginActivity : AppCompatActivity() {
         val jsonObjectRequest = object : JsonObjectRequest(Request.Method.POST, url, jsonParams, { response ->
 //            me retorna los datos de guardado
             Log.i("respuesta", response.toString())
+
+            val jsonObject = JSONTokener(response.toString()).nextValue() as JSONObject
+            val usuario = jsonObject.getString("usuario")
+            Log.i("Usuario: ", usuario)
 
             // Obtenemos el PreferenceManager
             val preferencias  = getPreferences(Context.MODE_PRIVATE);
