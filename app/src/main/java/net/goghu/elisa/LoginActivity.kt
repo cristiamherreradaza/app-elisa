@@ -87,6 +87,7 @@ class LoginActivity : AppCompatActivity() {
             val preferencias  = getPreferences(Context.MODE_PRIVATE);
 
             with(preferencias.edit()){
+                putString("usuario", usuario)
                 putString("nombre", name)
                 putString("email", email)
                     .apply()
