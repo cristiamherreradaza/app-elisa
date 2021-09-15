@@ -1,6 +1,10 @@
 package net.goghu.elisa
 
 import android.content.Context
+import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -29,6 +33,29 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        // Obtenemos el PreferenceManager
+        val preferenciaGuardada  = getPreferences(MODE_PRIVATE);
+        val nombreSession = preferenciaGuardada.getString("nombre", "NA").toString()
+        if (nombreSession != "NA"){
+            Log.i("Informacion session", "si tiene")
+            
+            // si tiene session saltamos a la siguiente actividad
+            val intent = Intent(this@LoginActivity,PrincipalActivity::class.java);
+            intent.putExtra("nombre", nombreSession)
+            startActivity(intent);
+        }else{
+            Log.i("Informacion session", "ninguna session")
+        }
+
+//        Toast.makeText(this, isOnline(), Toast.LENGTH_LONG)
+        if (isOnline(this)){
+            Log.i("En linea", "Si esta")
+        }else{
+            Log.i("En linea", "No esta")
+            Toast.makeText(this, "CONECTESE A INTERNET", Toast.LENGTH_LONG).show()
+            binding.btnIngresar.visibility = View.INVISIBLE
+        }
 
         binding.btnIngresar.setOnClickListener{
 
@@ -79,9 +106,11 @@ class LoginActivity : AppCompatActivity() {
 //            me retorna los datos de guardado
             Log.i("respuesta", response.toString())
 
+            // manejamos la respuesta
             val jsonObject = JSONTokener(response.toString()).nextValue() as JSONObject
+            // capturamos el id que nos devolvio el registro
             val usuario = jsonObject.getString("usuario")
-            Log.i("Usuario: ", usuario)
+//            Log.i("Usuario: ", usuario)
 
             // Obtenemos el PreferenceManager
             val preferencias  = getPreferences(Context.MODE_PRIVATE);
@@ -97,7 +126,7 @@ class LoginActivity : AppCompatActivity() {
 
 //            preferencias.getString()
 
-            updateUI(":)")
+            // updateUI(":)")
 
         },{
             if (it.networkResponse.statusCode == 400){
@@ -121,4 +150,26 @@ class LoginActivity : AppCompatActivity() {
         binding.tvResult.text = result
     }
 
+    // verificamos si tiene conexion a internet
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
+    }
 }
