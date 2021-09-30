@@ -11,6 +11,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.PermissionChecker.checkSelfPermission
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.gson.Gson
@@ -126,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
 
 //            preferencias.getString()
 
-            // updateUI(":)")
+            updateUI("Se registro correctamente")
 
         },{
             if (it.networkResponse.statusCode == 400){
