@@ -31,10 +31,11 @@ class SlideshowFragment : Fragment() {
         _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textSlideshow
+        /*val textView: TextView = binding.textSlideshow
         slideshowViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+            textView.text = "Registra a tus familiares"
         })
+        return root*/
         return root
     }
 
