@@ -60,6 +60,7 @@ class PrincipalActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         Toast.makeText(this, "holas desde la actividad", Toast.LENGTH_LONG).show()
+
         // llamamos a la ubicacion y todas las funciones que necesita
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -136,6 +137,7 @@ class PrincipalActivity : AppCompatActivity() {
         )
     }
 
+    // verficamos que los permisos esten habilitados
     private fun checkPermissions(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -160,10 +162,21 @@ class PrincipalActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_ID) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 getLastLocation()
             }
         }
+    }
+
+    fun panico(view: android.view.View) {
+        getLastLocation();
+        Toast.makeText(this, "holas desde el boton", Toast.LENGTH_LONG).show()
+//        var mLastLocation: Location = locationResult.lastLocation
+//            findViewById<TextView>(R.id.latTextView).text = mLastLocation.latitude.toString()
+//            findViewById<TextView>(R.id.lonTextView).text = mLastLocation.longitude.toString()
+//        Log.i("ubicacion latitud ", mLastLocation.latitude.toString())
+//        Log.i("ubicacion longitud ", mLastLocation.longitude.toString())
     }
 }

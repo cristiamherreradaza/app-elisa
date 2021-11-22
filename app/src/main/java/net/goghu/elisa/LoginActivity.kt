@@ -77,16 +77,6 @@ class LoginActivity : AppCompatActivity() {
             }
             envia(nombre, email, password)
         }
-
-        /*binding.tiNombre.onFocusChangeListener = View.OnFocusChangeListener{view, foco ->
-            if (!foco){
-                if (nombre.isEmpty()){
-                    binding.tiNombre.error = getString(R.string.card_required)
-                }
-            }
-        }*/
-
-
     }
 
     private fun envia(nombre:String, email: String, password: String){
