@@ -184,11 +184,11 @@ class PrincipalActivity : AppCompatActivity() {
 
     // notificaciones push
     fun suscribirTema(){
-        MyFirebaseMessagingService.subscribeTopic("Encargados")
+        MyFirebaseMessagingService.subscribeTopic(this,"Encargados")
     }
 
     fun salirTema(){
-        MyFirebaseMessagingService.unsubscribeTopic("Encargados")
+        MyFirebaseMessagingService.unsubscribeTopic(this, "Encargados")
     }
 
     fun enviarMensaje(){
