@@ -23,6 +23,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.dwarsh.pushnotificationsample.MyFirebaseMessagingService
 import com.google.android.gms.location.*
 import net.goghu.elisa.databinding.ActivityPrincipalBinding
 
@@ -161,6 +162,7 @@ class PrincipalActivity : AppCompatActivity() {
         )
     }
 
+    // verificacion si no nos concedio el permiso
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_ID) {
@@ -179,4 +181,19 @@ class PrincipalActivity : AppCompatActivity() {
 //        Log.i("ubicacion latitud ", mLastLocation.latitude.toString())
 //        Log.i("ubicacion longitud ", mLastLocation.longitude.toString())
     }
+
+    // notificaciones push
+    fun suscribirTema(){
+        MyFirebaseMessagingService.subscribeTopic("Encargados")
+    }
+
+    fun salirTema(){
+        MyFirebaseMessagingService.unsubscribeTopic("Encargados")
+    }
+
+    fun enviarMensaje(){
+        MyFirebaseMessagingService.sendMessage("TItulo: ELisa", "Aqui el mensaje", "Encargados")
+    }
+
+    // fin notificaciones push
 }
