@@ -19,19 +19,19 @@ import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.goghu.elisa.PrincipalActivity
+import net.goghu.elisa.R
 import org.json.JSONObject
 import java.io.*
 import java.lang.System.currentTimeMillis
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
-
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     companion object {
         var token : String? = null
 
-        val key : String = "------------------------------------------------------------------"
+        val key : String = "AAAAAIgEo3g:APA91bGtpthAN0j0LbHh1zXx12kc6kqjuA2Utb0hCXfmBUN_XZ53vzYyxGGzvP8x5auyAWz20UZbBFcgM8YtecxZK3gi9RGuppA3JBpcElACzse91AXdve57JUK7DT5KPzDugEqZLemL"
 
         fun subscribeTopic(context: Context, topic: String) {
             FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnSuccessListener {

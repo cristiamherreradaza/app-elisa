@@ -183,15 +183,17 @@ class PrincipalActivity : AppCompatActivity() {
     }
 
     // notificaciones push
-    fun suscribirTema(){
-        MyFirebaseMessagingService.subscribeTopic(this,"Encargados")
-    }
 
     fun salirTema(){
         MyFirebaseMessagingService.unsubscribeTopic(this, "Encargados")
     }
 
-    fun enviarMensaje(){
+    fun suscribirTema(view: android.view.View) {
+        MyFirebaseMessagingService.subscribeTopic(this,"Encargados")
+        Toast.makeText(this, "Suscrito a Encargados", Toast.LENGTH_LONG).show()
+    }
+
+    fun enviarMensaje(view: android.view.View) {
         MyFirebaseMessagingService.sendMessage("TItulo: ELisa", "Aqui el mensaje", "Encargados")
     }
 
