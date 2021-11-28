@@ -23,7 +23,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.dwarsh.pushnotificationsample.MyFirebaseMessagingService
+import net.goghu.elisa.MyFirebaseMessagingService
 import com.google.android.gms.location.*
 import net.goghu.elisa.databinding.ActivityPrincipalBinding
 
@@ -189,7 +189,7 @@ class PrincipalActivity : AppCompatActivity() {
     }
 
     fun suscribirTema(view: android.view.View) {
-        MyFirebaseMessagingService.subscribeTopic(this,"Encargados")
+        MyFirebaseMessagingService.subscribeTopic(this@PrincipalActivity,"Encargados")
         Toast.makeText(this, "Suscrito a Encargados", Toast.LENGTH_LONG).show()
     }
 
