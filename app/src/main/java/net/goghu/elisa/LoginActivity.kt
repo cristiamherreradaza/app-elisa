@@ -46,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
             intent.putExtra("nombre", nombreSession)
             startActivity(intent);
         }else{
+            // se adiciono el log
             Log.i("Informacion session", "ninguna session")
         }
 
