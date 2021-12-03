@@ -31,7 +31,7 @@
         android:src="@drawable/btnpanic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:onClick="suscribirTema"
+        android:onClick="panico"
         app:layout_constraintTop_toBottomOf="@+id/text_home" />
 
     <ImageView

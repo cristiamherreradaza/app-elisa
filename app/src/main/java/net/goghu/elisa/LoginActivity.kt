@@ -127,7 +127,6 @@ class LoginActivity : AppCompatActivity() {
         }){
             override fun getHeaders(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
-
                 params["Content-Type"] = "application/json"
                 return params
             }

@@ -23,14 +23,21 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
 import net.goghu.elisa.MyFirebaseMessagingService
 import com.google.android.gms.location.*
 import net.goghu.elisa.databinding.ActivityPrincipalBinding
+import org.json.JSONObject
+import org.json.JSONTokener
 
 class PrincipalActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityPrincipalBinding
+
+    public lateinit var latitud: String
+    public lateinit var longitud: String
 
     val PERMISSION_ID = 42
     lateinit var mFusedLocationClient: FusedLocationProviderClient
@@ -90,10 +97,13 @@ class PrincipalActivity : AppCompatActivity() {
                     if (location == null) {
                         requestNewLocationData()
                     } else {
-//                        findViewById<TextView>(R.id.latTextView).text = location.latitude.toString()
-//                        findViewById<TextView>(R.id.lonTextView).text = location.longitude.toString()
                         Log.i("ubicacion latitud ", location.latitude.toString())
                         Log.i("ubicacion longitud ", location.longitude.toString())
+
+                        latitud = location.latitude.toString()
+                        longitud = location.longitude.toString()
+
+
                     }
                 }
             } else {
@@ -174,12 +184,8 @@ class PrincipalActivity : AppCompatActivity() {
 
     fun panico(view: android.view.View) {
         getLastLocation();
+        enviaLocalizacion("1", latitud, longitud)
         Toast.makeText(this, "holas desde el boton", Toast.LENGTH_LONG).show()
-//        var mLastLocation: Location = locationResult.lastLocation
-//            findViewById<TextView>(R.id.latTextView).text = mLastLocation.latitude.toString()
-//            findViewById<TextView>(R.id.lonTextView).text = mLastLocation.longitude.toString()
-//        Log.i("ubicacion latitud ", mLastLocation.latitude.toString())
-//        Log.i("ubicacion longitud ", mLastLocation.longitude.toString())
     }
 
     // notificaciones push
@@ -198,4 +204,43 @@ class PrincipalActivity : AppCompatActivity() {
     }
 
     // fin notificaciones push
+
+    private fun enviaLocalizacion(usuario: String, latitud :String, longitud: String){
+//        Toast.makeText(this, nombre, Toast.LENGTH_SHORT).show()
+        val url = Constants.BASE_URL + Constants.API_PATH + Constants.LOCALIZACION_PATH
+
+        val jsonParams = JSONObject()
+
+        jsonParams.put(Constants.ID_PARAM, usuario)
+        jsonParams.put(Constants.LATITUD_PARAM, latitud)
+        jsonParams.put(Constants.LONGITUD_PARAM, longitud)
+
+        val jsonObjectRequest = object : JsonObjectRequest(Request.Method.POST, url, jsonParams, { response ->
+//            me retorna los datos de guardado
+            Log.i("respuesta", response.toString())
+
+            // manejamos la respuesta
+            val jsonObject = JSONTokener(response.toString()).nextValue() as JSONObject
+            // capturamos el id que nos devolvio el registro
+            val usuario = jsonObject.getString("usuario")
+//            Log.i("Usuario: ", usuario)
+
+
+
+
+        },{
+            if (it.networkResponse.statusCode == 400){
+                Log.i("Error", "error en el envio")
+            }
+        }){
+            override fun getHeaders(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["Content-Type"] = "application/json"
+                return params
+            }
+        }
+
+        LoginApplication.reqResApi.addToRequestQueue(jsonObjectRequest)
+
+    }
 }
