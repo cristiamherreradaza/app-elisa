@@ -12,6 +12,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.Menu
+import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -67,7 +68,7 @@ class PrincipalActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        Toast.makeText(this, "holas desde la actividad", Toast.LENGTH_LONG).show()
+        //Toast.makeText(this, "holas desde la actividad", Toast.LENGTH_LONG).show()
 
         // llamamos a la ubicacion y todas las funciones que necesita
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -100,9 +101,11 @@ class PrincipalActivity : AppCompatActivity() {
                         Log.i("ubicacion latitud ", location.latitude.toString())
                         Log.i("ubicacion longitud ", location.longitude.toString())
 
+                        findViewById<TextView>(R.id.txt_latitud).text = location.latitude.toString()
+                        findViewById<TextView>(R.id.txt_longitud).text = location.longitude.toString()
+
                         latitud = location.latitude.toString()
                         longitud = location.longitude.toString()
-
 
                     }
                 }
@@ -118,7 +121,7 @@ class PrincipalActivity : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     private fun requestNewLocationData() {
-        var mLocationRequest = LocationRequest()
+        var mLocationRequest = LocationRequest.create()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         mLocationRequest.interval = 0
         mLocationRequest.fastestInterval = 0
@@ -131,13 +134,21 @@ class PrincipalActivity : AppCompatActivity() {
         )
     }
 
+    // cuando cambiamos de ubicacion llamamos al evento de la nueva ubicacion
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             var mLastLocation: Location = locationResult.lastLocation
-//            findViewById<TextView>(R.id.latTextView).text = mLastLocation.latitude.toString()
-//            findViewById<TextView>(R.id.lonTextView).text = mLastLocation.longitude.toString()
+
+            findViewById<TextView>(R.id.text_home).text = "Cambio la posicion"
+            findViewById<TextView>(R.id.txt_latitud).text = mLastLocation.latitude.toString()
+            findViewById<TextView>(R.id.txt_longitud).text = mLastLocation.longitude.toString()
+
             Log.i("ubicacion latitud ", mLastLocation.latitude.toString())
             Log.i("ubicacion longitud ", mLastLocation.longitude.toString())
+
+            Toast.makeText(this@PrincipalActivity, "Se cambio de ubicacion", Toast.LENGTH_LONG).show()
+
+            enviaLocalizacion("1", mLastLocation.latitude.toString(), mLastLocation.longitude.toString())
         }
     }
 
@@ -184,6 +195,7 @@ class PrincipalActivity : AppCompatActivity() {
 
     fun panico(view: android.view.View) {
         getLastLocation();
+        findViewById<TextView>(R.id.text_home).text = "Cambio la posicion"
         enviaLocalizacion("1", latitud, longitud)
         Toast.makeText(this, "holas desde el boton", Toast.LENGTH_LONG).show()
     }
