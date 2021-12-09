@@ -212,7 +212,7 @@ class PrincipalActivity : AppCompatActivity() {
     }
 
     fun enviarMensaje(view: android.view.View) {
-        MyFirebaseMessagingService.sendMessage("TItulo: ELisa", "Aqui el mensaje", "Encargados")
+        MyFirebaseMessagingService.sendMessage("Elisa: Alerta", "Etson en problemas", "Encargados")
     }
 
     // fin notificaciones push
