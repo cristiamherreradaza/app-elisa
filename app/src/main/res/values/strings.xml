@@ -16,4 +16,5 @@
     <string name="password">password</string>
     <string name="ingresar">Ingresar</string>
     <string name="card_required">Requerido</string>
+    <string name="registrar">REGISTRAR</string>
 </resources>

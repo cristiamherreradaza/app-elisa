@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -25,6 +27,7 @@ class GalleryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         galleryViewModel =
             ViewModelProvider(this).get(GalleryViewModel::class.java)
 
@@ -35,8 +38,27 @@ class GalleryFragment : Fragment() {
         galleryViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
+
+        val webView: WebView = binding.webview
+        // WebViewClient allows you to handle
+        // onPageFinished and override Url loading.
+        webView.webViewClient = WebViewClient()
+
+        // this will load the url of the website
+        webView.loadUrl("https://goghu.net/elisa/public/")
+
+        // this will enable the javascript settings
+        webView.settings.javaScriptEnabled = true
+
+        // if you want to enable zoom feature
+        webView.settings.setSupportZoom(true)
+
         return root
+
+
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

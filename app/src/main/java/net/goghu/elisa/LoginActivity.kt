@@ -163,4 +163,8 @@ class LoginActivity : AppCompatActivity() {
         }
         return false
     }
+
+    private fun session(){
+
+    }
 }

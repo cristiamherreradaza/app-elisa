@@ -12,6 +12,8 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.Menu
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
@@ -42,6 +44,7 @@ class PrincipalActivity : AppCompatActivity() {
 
     val PERMISSION_ID = 42
     lateinit var mFusedLocationClient: FusedLocationProviderClient
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +77,8 @@ class PrincipalActivity : AppCompatActivity() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         getLastLocation()
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -212,7 +217,7 @@ class PrincipalActivity : AppCompatActivity() {
     }
 
     fun enviarMensaje(view: android.view.View) {
-        MyFirebaseMessagingService.sendMessage("Elisa: Alerta", "Edson en problemas", "Encargados")
+        MyFirebaseMessagingService.sendMessage("Elisa: Alerta", "Cristiam en problemas", "Encargados")
     }
 
     // fin notificaciones push
