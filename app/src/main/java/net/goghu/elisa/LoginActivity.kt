@@ -61,13 +61,13 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnIngresar.setOnClickListener{
 
-            val nombre = binding.tiNombre.text.toString()
+//            val nombre = binding.tiNombre.text.toString()
             val email = binding.tiEmail.text.toString()
             val password = binding.tiPassword.text.toString()
 
-            if (nombre.isEmpty()){
-                binding.tiNombre.error = getString(R.string.card_required)
-            }
+//            if (nombre.isEmpty()){
+//                binding.tiNombre.error = getString(R.string.card_required)
+//            }
 
             if (email.isEmpty()){
                 binding.tiEmail.error = getString(R.string.card_required)
@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
             if (password.isEmpty()){
                 binding.tiPassword.error = getString(R.string.card_required)
             }
-            envia(nombre, email, password)
+            //envia(nombre, email, password)
         }
     }
 

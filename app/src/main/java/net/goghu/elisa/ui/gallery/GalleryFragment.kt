@@ -45,7 +45,7 @@ class GalleryFragment : Fragment() {
         webView.webViewClient = WebViewClient()
 
         // this will load the url of the website
-        webView.loadUrl("https://goghu.net/elisa/public/")
+        webView.loadUrl("https://goghu.net/elisa/public/Social/muromobil")
 
         // this will enable the javascript settings
         webView.settings.javaScriptEnabled = true
