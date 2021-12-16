@@ -1,9 +1,11 @@
 package net.goghu.elisa
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import net.goghu.elisa.databinding.ActivityRegistroBinding
@@ -79,14 +81,15 @@ class RegistroActivity : AppCompatActivity() {
 
             Log.i("nombre g ", preferencias.getString("nombre", "NA").toString())
 
+            Toast.makeText(this, "Registro exitoso!!!", Toast.LENGTH_SHORT).show()
 //            preferencias.getString()
-
-//            updateUI("Se registro correctamente")
-            
+            val intent = Intent(this@RegistroActivity,PrincipalActivity::class.java);
+            startActivity(intent);
 
         },{
             if (it.networkResponse.statusCode == 400){
 //                updateUI("error en la peticion")
+                Toast.makeText(this, "Error al registrarse", Toast.LENGTH_SHORT).show()
             }
         }){
             override fun getHeaders(): MutableMap<String, String> {
