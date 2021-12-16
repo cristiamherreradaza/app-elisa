@@ -18,14 +18,14 @@ class InicioActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.btnIngresar.setOnClickListener{
-            Toast.makeText(this, "Entro", Toast.LENGTH_LONG).show()
+//            Toast.makeText(this, "Entro", Toast.LENGTH_LONG).show()
 
             val intent = Intent(this@InicioActivity,LoginActivity::class.java);
             startActivity(intent);
         }
 
         binding.btnRegistrar.setOnClickListener{
-            Toast.makeText(this, "Entro", Toast.LENGTH_LONG).show()
+//            Toast.makeText(this, "Entro", Toast.LENGTH_LONG).show()
 
             val intent = Intent(this@InicioActivity,RegistroActivity::class.java);
             startActivity(intent);

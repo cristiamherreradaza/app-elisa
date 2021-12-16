@@ -5,6 +5,7 @@ object Constants {
     const val BASE_URL = "https://goghu.net/elisa/public"
     const val API_PATH = "/api"
     const val REGISTER_PATH = "/User/registra"
+    const val LOGIN_PATH = "/User/login"
 
     const val LOCALIZACION_PATH = "/User/localizacion"
 

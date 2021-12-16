@@ -61,13 +61,8 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnIngresar.setOnClickListener{
 
-            val nombre = binding.tiNombre.text.toString()
             val email = binding.tiEmail.text.toString()
             val password = binding.tiPassword.text.toString()
-
-            if (nombre.isEmpty()){
-                binding.tiNombre.error = getString(R.string.card_required)
-            }
 
             if (email.isEmpty()){
                 binding.tiEmail.error = getString(R.string.card_required)
@@ -83,16 +78,14 @@ class LoginActivity : AppCompatActivity() {
 
     private fun envia(nombre:String, email: String, password: String){
 //        Toast.makeText(this, nombre, Toast.LENGTH_SHORT).show()
-        val url = Constants.BASE_URL + Constants.API_PATH + Constants.REGISTER_PATH
+        val url = Constants.BASE_URL + Constants.API_PATH + Constants.LOGIN_PATH
 
-        val name = binding.tiNombre.text.toString().trim()
         val email = binding.tiEmail.text.toString().trim()
         val password = binding.tiPassword.text.toString().trim()
 
         val jsonParams = JSONObject()
 
         jsonParams.put(Constants.EMAIL_PARAM, email)
-        jsonParams.put(Constants.NOMBRE_PARAM, name)
         jsonParams.put(Constants.PASSWORD_PARAM, password)
 
         val jsonObjectRequest = object : JsonObjectRequest(Request.Method.POST, url, jsonParams, { response ->
@@ -102,28 +95,34 @@ class LoginActivity : AppCompatActivity() {
             // manejamos la respuesta
             val jsonObject = JSONTokener(response.toString()).nextValue() as JSONObject
             // capturamos el id que nos devolvio el registro
-            val usuario = jsonObject.getString("usuario")
-//            Log.i("Usuario: ", usuario)
+            val mensaje = jsonObject.getString("mensaje")
 
-            // Obtenemos el PreferenceManager
-            val preferencias  = getPreferences(Context.MODE_PRIVATE);
+                val usuario = jsonObject.getString("usuario")
 
-            with(preferencias.edit()){
-                putString("usuario", usuario)
-                putString("nombre", name)
-                putString("email", email)
-                    .apply()
-            }
+                // Obtenemos el PreferenceManager
+                val preferencias  = getPreferences(Context.MODE_PRIVATE);
 
-            Log.i("nombre g ", preferencias.getString("nombre", "NA").toString())
+                with(preferencias.edit()){
+                    putString("usuario", usuario)
+                    putString("email", email)
+                        .apply()
+                }
+
+                val intent = Intent(this@LoginActivity,PrincipalActivity::class.java);
+                startActivity(intent);
+
+
+
+            // Log.i("nombre g ", preferencias.getString("nombre", "NA").toString())
 
 //            preferencias.getString()
 
-            updateUI("Se registro correctamente")
+            //updateUI("Se registro correctamente")
 
         },{
-            if (it.networkResponse.statusCode == 400){
-                updateUI("error en la peticion")
+            if (it.networkResponse.statusCode == 401){
+                //updateUI("error en la peticion")
+                Toast.makeText(this, "Usuario y Password invalidos", Toast.LENGTH_SHORT).show()
             }
         }){
             override fun getHeaders(): MutableMap<String, String> {
@@ -138,8 +137,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun updateUI(result: String) {
-        binding.tvResult.visibility = View.VISIBLE
-        binding.tvResult.text = result
+        //binding.tvResult.visibility = View.VISIBLE
+        //binding.tvResult.text = result
     }
 
     // verificamos si tiene conexion a internet
