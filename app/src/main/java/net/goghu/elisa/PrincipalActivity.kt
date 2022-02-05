@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
@@ -111,7 +112,6 @@ class PrincipalActivity : AppCompatActivity() {
 
                         latitud = location.latitude.toString()
                         longitud = location.longitude.toString()
-
                     }
                 }
             } else {

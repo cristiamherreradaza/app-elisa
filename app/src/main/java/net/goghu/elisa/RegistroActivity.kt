@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import com.android.volley.Request
@@ -67,24 +68,31 @@ class RegistroActivity : AppCompatActivity() {
             val jsonObject = JSONTokener(response.toString()).nextValue() as JSONObject
             // capturamos el id que nos devolvio el registro
             val usuario = jsonObject.getString("usuario")
-//            Log.i("Usuario: ", usuario)
+            val nombre = jsonObject.getString("nombre")
+            val email = jsonObject.getString("email")
+            val token = jsonObject.getString("token")
+
+            Log.i("Volley Usuario: ", usuario)
+            Log.i("Volley nombre: ", nombre)
 
             // Obtenemos el PreferenceManager
-            val preferencias  = getPreferences(Context.MODE_PRIVATE);
+//            val preferencias  = getPreferences(Context.MODE_PRIVATE)
+            val preferencias = getSharedPreferences("preferencias", Context.MODE_PRIVATE)
 
             with(preferencias.edit()){
                 putString("usuario", usuario)
-                putString("nombre", name)
+                putString("nombre", nombre)
                 putString("email", email)
+                putString("token", token)
                     .apply()
             }
 
-            Log.i("nombre g ", preferencias.getString("nombre", "NA").toString())
+            // Log.i("nombre g ", preferencias.getString("nombre", "NA").toString())
 
             Toast.makeText(this, "Registro exitoso!!!", Toast.LENGTH_SHORT).show()
 //            preferencias.getString()
-            val intent = Intent(this@RegistroActivity,PrincipalActivity::class.java);
-            startActivity(intent);
+            val intent = Intent(this@RegistroActivity,PrincipalActivity::class.java)
+            startActivity(intent)
 
         },{
             if (it.networkResponse.statusCode == 400){
