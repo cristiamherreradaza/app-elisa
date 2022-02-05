@@ -13,6 +13,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TextView
@@ -73,6 +74,17 @@ class PrincipalActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         //Toast.makeText(this, "holas desde la actividad", Toast.LENGTH_LONG).show()
+
+        // leemos las preferencias guardadas
+        val preferencias = getSharedPreferences("preferencias", Context.MODE_PRIVATE)
+        val nombre = preferencias.getString("nombre", "").toString()
+
+        // cambiamos el nombre del usuario al nav
+        val navigationView : NavigationView  = findViewById(R.id.nav_view)
+        val headerView : View = navigationView.getHeaderView(0)
+        val navUsername : TextView = headerView.findViewById(R.id.txtVNombreUsuario)
+
+        navUsername.text = nombre
 
         // llamamos a la ubicacion y todas las funciones que necesita
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
