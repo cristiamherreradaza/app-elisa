@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
@@ -41,11 +42,16 @@ class PrincipalActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityPrincipalBinding
 
-    public lateinit var latitud: String
+    private val LOCATION_PERMISSION_REQ_CODE = 1000
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
+
+    /*public lateinit var latitud: String
     public lateinit var longitud: String
 
     val PERMISSION_ID = 42
-    lateinit var mFusedLocationClient: FusedLocationProviderClient
+    lateinit var mFusedLocationClient: FusedLocationProviderClient*/
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,10 +92,14 @@ class PrincipalActivity : AppCompatActivity() {
 
         navUsername.text = nombre
 
-        // llamamos a la ubicacion y todas las funciones que necesita
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        // llamamos al servicio de ubicacion
+        // initialize fused location client
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        getLastLocation()
+        // llamamos a la ubicacion y todas las funciones que necesita
+//        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+//        getLastLocation()
 
 
     }
@@ -105,9 +115,62 @@ class PrincipalActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+    //nuevas funciones de localizacion
+    private fun getCurrentLocation() {
+        // checking location permission
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // request permission
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQ_CODE);
+            return
+        }
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location ->
+                // getting the last known or current location
+                latitude = location.latitude
+                longitude = location.longitude
+
+                Log.i("latitud ", latitude.toString())
+                Log.i("longitud ", longitude.toString())
+                /*tvLatitude.text = "Latitude: ${location.latitude}"
+                tvLongitude.text = "Longitude: ${location.longitude}"
+                tvProvider.text = "Provider: ${location.provider}"*/
+//                btOpenMap.visibility = View.VISIBLE
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed on getting current location",
+                    Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            LOCATION_PERMISSION_REQ_CODE -> {
+                if (grantResults.isNotEmpty() &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission granted
+                } else {
+                    // permission denied
+                    Toast.makeText(this, "You need to grant permission to access location",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+    private fun openMap() {
+        val uri = Uri.parse("geo:${latitude},${longitude}")
+        val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+        startActivity(mapIntent)
+    }
+
     // localizacion
     @SuppressLint("MissingPermission")
-    private fun getLastLocation() {
+    /*private fun getLastLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
 
@@ -119,8 +182,8 @@ class PrincipalActivity : AppCompatActivity() {
                         Log.i("ubicacion latitud ", location.latitude.toString())
                         Log.i("ubicacion longitud ", location.longitude.toString())
 
-                        findViewById<TextView>(R.id.txt_latitud).text = location.latitude.toString()
-                        findViewById<TextView>(R.id.txt_longitud).text = location.longitude.toString()
+//                        findViewById<TextView>(R.id.txt_latitud).text = location.latitude.toString()
+//                        findViewById<TextView>(R.id.txt_longitud).text = location.longitude.toString()
 
                         latitud = location.latitude.toString()
                         longitud = location.longitude.toString()
@@ -128,8 +191,8 @@ class PrincipalActivity : AppCompatActivity() {
                 }
             } else {
                 Toast.makeText(this, "Turn on location", Toast.LENGTH_LONG).show()
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
+//                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+//                startActivity(intent)
             }
         } else {
             requestPermissions()
@@ -156,9 +219,9 @@ class PrincipalActivity : AppCompatActivity() {
         override fun onLocationResult(locationResult: LocationResult) {
             var mLastLocation: Location = locationResult.lastLocation
 
-            findViewById<TextView>(R.id.text_home).text = "Cambio la posicion"
-            findViewById<TextView>(R.id.txt_latitud).text = mLastLocation.latitude.toString()
-            findViewById<TextView>(R.id.txt_longitud).text = mLastLocation.longitude.toString()
+//            findViewById<TextView>(R.id.text_home).text = "Cambio la posicion"
+//            findViewById<TextView>(R.id.txt_latitud).text = mLastLocation.latitude.toString()
+//            findViewById<TextView>(R.id.txt_longitud).text = mLastLocation.longitude.toString()
 
             Log.i("ubicacion latitud ", mLastLocation.latitude.toString())
             Log.i("ubicacion longitud ", mLastLocation.longitude.toString())
@@ -208,18 +271,20 @@ class PrincipalActivity : AppCompatActivity() {
                 getLastLocation()
             }
         }
-    }
+    }*/
 
     fun panico(view: android.view.View) {
-        getLastLocation();
-        findViewById<TextView>(R.id.text_home).text = "Cambio la posicion"
-        enviaLocalizacion("1", latitud, longitud)
+//        getLastLocation()
+//        findViewById<TextView>(R.id.text_home).text = "Cambio la posicion"
+        getCurrentLocation()
+        //enviaLocalizacion("19", "20")
+//        Log.i("Latitud crt", latitud)
         Toast.makeText(this, "holas desde el boton", Toast.LENGTH_LONG).show()
     }
 
     // notificaciones push
 
-    fun salirTema(){
+    /*fun salirTema(){
         MyFirebaseMessagingService.unsubscribeTopic(this, "Encargados")
     }
 
@@ -230,17 +295,23 @@ class PrincipalActivity : AppCompatActivity() {
 
     fun enviarMensaje(view: android.view.View) {
         MyFirebaseMessagingService.sendMessage("Elisa: Alerta", "Cristiam en problemas", "Encargados")
-    }
+    }*/
 
     // fin notificaciones push
 
-    private fun enviaLocalizacion(usuario: String, latitud :String, longitud: String){
+    private fun enviaLocalizacion(latitud :String, longitud: String){
 //        Toast.makeText(this, nombre, Toast.LENGTH_SHORT).show()
         val url = Constants.BASE_URL + Constants.API_PATH + Constants.LOCALIZACION_PATH
 
+        // leemos las preferencias guardadas
+        val preferencias = getSharedPreferences("preferencias", Context.MODE_PRIVATE)
+        val usuarioId = preferencias.getString("usuario_id", "").toString()
+
+        Log.i("el usuarioId", usuarioId)
+
         val jsonParams = JSONObject()
 
-        jsonParams.put(Constants.ID_PARAM, usuario)
+        jsonParams.put(Constants.ID_PARAM, usuarioId)
         jsonParams.put(Constants.LATITUD_PARAM, latitud)
         jsonParams.put(Constants.LONGITUD_PARAM, longitud)
 
@@ -251,11 +322,8 @@ class PrincipalActivity : AppCompatActivity() {
             // manejamos la respuesta
             val jsonObject = JSONTokener(response.toString()).nextValue() as JSONObject
             // capturamos el id que nos devolvio el registro
-            val usuario = jsonObject.getString("usuario")
+            //val usuario = jsonObject.getString("usuario")
 //            Log.i("Usuario: ", usuario)
-
-
-
 
         },{
             if (it.networkResponse.statusCode == 400){
@@ -268,8 +336,6 @@ class PrincipalActivity : AppCompatActivity() {
                 return params
             }
         }
-
         LoginApplication.reqResApi.addToRequestQueue(jsonObjectRequest)
-
     }
 }

@@ -67,12 +67,12 @@ class RegistroActivity : AppCompatActivity() {
             // manejamos la respuesta
             val jsonObject = JSONTokener(response.toString()).nextValue() as JSONObject
             // capturamos el id que nos devolvio el registro
-            val usuario = jsonObject.getString("usuario")
+            val usuario_id = jsonObject.getString("usuario")
             val nombre = jsonObject.getString("nombre")
             val email = jsonObject.getString("email")
             val token = jsonObject.getString("token")
 
-            Log.i("Volley Usuario: ", usuario)
+            Log.i("Volley Usuario: ", usuario_id)
             Log.i("Volley nombre: ", nombre)
 
             // Obtenemos el PreferenceManager
@@ -80,7 +80,7 @@ class RegistroActivity : AppCompatActivity() {
             val preferencias = getSharedPreferences("preferencias", Context.MODE_PRIVATE)
 
             with(preferencias.edit()){
-                putString("usuario", usuario)
+                putString("usuario_id", usuario_id)
                 putString("nombre", nombre)
                 putString("email", email)
                 putString("token", token)
